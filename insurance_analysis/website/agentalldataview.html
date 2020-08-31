@@ -1,0 +1,52 @@
+{% extends 'basic2.html'%}
+{% block title %}Agent Data View{%endblock%}
+{%block css%}
+
+{%endblock%}
+{%block body%}
+<h4>Welcome: {{name}}</h4>
+<div class="row" style="margin:10px;">
+    {% if total%}
+    <div class="col-sm-2">Names<br/>{% for x in total.names %} {{ x }} <br/> {% endfor %}  </div>
+    <div class="col-sm-2">Dates<br/>{% for x in total.dates %}{{ x }} <br/> {% endfor %}  </div>
+    {%else%}
+    <div class="col-sm-2">Names<br/>{% for x in alldata.Name %} {{ x }}<br/>{% endfor %}    </div>
+    <div class="col-sm-1">DOB<br/>{% for x in alldata.DOB %}{{ x }}<br/>{% endfor %}  </div>
+    <div class="col-sm-1">Effective Date<br/>{% for x in alldata.EffectiveDate %} {{ x }}<br/>{% endfor %}    </div>
+    <div class="col-sm-2">Occupation<br/>{% for x in alldata.Occupation %} {{ x }}<br/>{% endfor %}   </div>
+    <div class="col-sm-2">State<br/>{% for x in alldata.State %} {{ x }}<br/>{% endfor %}   </div>
+    {%endif%}
+</div>
+
+
+
+{%endblock%}
+{%block script%}
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+function allfunction() {
+    chart.data.datasets[0].data = [{% for i in policy.policycounts %}{{ i }}{% if forloop.last %} {%else%} , {%endif%} {% endfor %}] ;
+    chart.data.labels = [{% for i in policy.policyname %}'{{ i }}'{% if forloop.last %} {%else%} , {%endif%} {% endfor %}];
+    chart.update();
+
+}
+
+{%endblock%}

@@ -1,0 +1,24 @@
+{% extends 'basic2.html'%}
+{% block title %}Agent Data View{%endblock%}
+{%block css%}
+
+{%endblock%}
+{%block body%}
+{% load static %}
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4" ><center><img src="{%static 'admin/img/user.png'%}" alt="agentpic" id="agentpic"></center></div>
+    <div class="col-sm-4"></div>
+</div>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4" >
+        <center><h3>{{name}}</h3>
+            <p>Address: H.no. 27 Jangjeet Nagar, Rajpur Chungi, Shamshabad road, Agra.</p>
+            <p>Email Address: 12345hrhr@gmail.com</p>
+            <p>Mobile Number: #######234</p>
+            <a href="#">Edit Profile</a>
+        </center></div>
+    <div class="col-sm-4"></div>
+</div>
+{%endblock%}

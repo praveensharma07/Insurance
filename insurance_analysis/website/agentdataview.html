@@ -1,0 +1,105 @@
+{% extends 'basic2.html'%}
+{% block title %}Agent Data View{%endblock%}
+{%block css%}
+
+{%endblock%}
+{%block body%}
+<h4>Welcome: {{name}}</h4>
+<div class="row" style="margin:5px;">
+    <div class="col-sm-2">
+        select date
+        <form action="/agentdataprocess" method="get">
+            <input type="hidden" id="agentname" name="agentname" value='{{name}}'>
+          <label >From:</label>
+          <input type="date" id="startdate" name="startdate">
+            <label >To:</label>
+            <input type="date" id="enddate" name="enddate">
+          <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="col-sm-8">
+        <div class="chart-container" style="position: relative;">
+        <canvas id="myChart">
+
+        </canvas>
+        </div>
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3 card">
+        <div class="card-body">
+            <h5 class="card-title">{{total}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Total Policies</h6>
+            <button id="btn1" onclick="allfunction()">See More</button>
+        </div>
+    </div>
+    <div class="col-sm-3 card">
+        <div class="card-body">
+            <h5 class="card-title">Under Progress</h5>
+            <h6 class="card-subtitle mb-2 text-muted">This Month</h6>
+            <button id="btn2">See More</button>
+        </div>
+    </div>
+    <div class="col-sm-3 card">
+        <div class="card-body">
+            <h5 class="card-title">{{total}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Claimed Insurances</h6>
+        </div></div>
+    <div class="col-sm-3 card">
+        <div class="card-body">
+            <h5 class="card-title">View All data</h5>
+            <form action="/agentdataprocess" method="get">
+            <input type="hidden" id="agentname" name="agentname" value='{{name}}'>
+            <button id="btn3" type="submit">View All data</button>
+            </form>
+        </div></div>
+    <div class="col-sm-3 card">
+        <div class="card-body">
+            <h5 class="card-title">{{maximum.policy}}<br>{{maximum.counts}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Most Opted Policy: </h6>
+            <button id="btn4" onclick="policyfunction()">See More</button>
+        </div></div>
+</div>
+{%endblock%}
+{%block script%}
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'Current',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [5, 4, 5, 2, 1, 4, 2]
+        }]
+    },
+
+    // Configuration options go here
+    options: {}
+});
+function allfunction() {
+    chart.data.datasets[0].data = [{% for i in policy.policycounts %}{{ i }}{% if forloop.last %} {%else%} , {%endif%} {% endfor %}] ;
+    chart.data.datasets[0].label = 'Policies'
+    chart.data.datasets[0].backgroundColor='rgb(255, 99, 132,0.5)'
+    chart.data.labels = [{% for i in policy.policyname %}'{{ i }}'{% if forloop.last %} {%else%} , {%endif%} {% endfor %}];
+    chart.update();
+
+}
+
+function policyfunction() {
+    chart.data.datasets[0].data = [{% for i in year.policycounts %}{{ i }}{% if forloop.last %} {%else%} , {%endif%} {% endfor %}] ;
+    chart.data.datasets[0].label = 'Policies'
+    chart.data.datasets[0].backgroundColor='rgb(255,255,255,0.1)'
+    chart.data.labels = [{% for i in year.policyyears %}'{{ i }}'{% if forloop.last %} {%else%} , {%endif%} {% endfor %}];
+    chart.update();
+
+}
+
+{%endblock%}
